@@ -7,10 +7,11 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 @SpringBootApplication
-public class BankingProgramApplication {
+public class BankingProgram {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BankingProgramApplication.class, args);
+		SpringApplication.run(BankingProgram.class, args);
+        MySQL.meth();
 		String name, surname;
         int pin;
         Scanner scanner = new Scanner(System.in);

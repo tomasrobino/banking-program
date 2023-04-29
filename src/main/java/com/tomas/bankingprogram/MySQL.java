@@ -2,16 +2,21 @@ package com.tomas.bankingprogram;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Date;
 
-import com.mysql.jdbc.Driver;
 
 public class MySQL {
-    public void readDB() {
-        Driver i;
+    public static void meth() {
+        String url = "jdbc:mysql://localhost:3306/bank";
+        String user = "tomas";
+        String password = "password";
+
+        try(Connection connection = DriverManager.getConnection(url, user, password);) {
+            System.out.println("Success!");
+        } catch (SQLException e) {
+            System.out.println("Failure.");
+        }
     }
+    
+    
 }
