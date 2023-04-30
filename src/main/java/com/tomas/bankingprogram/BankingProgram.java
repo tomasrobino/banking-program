@@ -41,7 +41,6 @@ public class BankingProgram {
                         scanner.nextLine();
                     }
                 } while(aux == 0);
-                //TODO: Check if credentials are correct
                 authenticator = new MySQL(name, surname, pin);
             }
             scanner.nextLine();
