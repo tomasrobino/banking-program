@@ -8,12 +8,11 @@ public class User {
     private String name, surname;
     private ArrayList<Account> accountList = new ArrayList<>();
 
-    User(int id, String name, String surname, int pin, ArrayList<Account> accountList) {
+    User(int id, String name, String surname, int pin) {
         this.id = id;
         this.pin = pin;
         this.name = name;
         this.surname = surname;
-        this.accountList = accountList;
     }
 
     User(int id) {
@@ -49,7 +48,7 @@ public class User {
     }
 
 
-    
+
     public boolean deleteUser(String name, String surname, int pin) {
         return true;
     }
