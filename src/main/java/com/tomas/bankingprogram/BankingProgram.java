@@ -150,15 +150,17 @@ public class BankingProgram {
                 System.out.println("You have selected account #"+accSel.getId());
 
                 //Choosing operation to do on selected account
-                System.out.println("Please write 1 if you wish to review your balance, 2 to add funds, 3 to withdraw");
+                System.out.println("Please write 1 if you wish to review your balance, 2 to add funds, 3 to withdraw, 4 to transfer funds");
                 int op = scanner.nextInt();
-                if (op == 1) {
+                if(op == 1) {
                     System.out.println("Your balance is: "+accSel.getBalance());
                 } else if(op == 2 || op == 3) {
                     System.out.println("Please introduce amount:");
                     accSel.changeBalance(scanner.nextDouble());
                     System.out.println("Your new balance is $"+accSel.getBalance());
-                }          
+                } else if(op == 4) {
+                    //TODO: Transfer funds system
+                }
             } else {
                 //User wants to open new account
                 //TODO: Open account system
