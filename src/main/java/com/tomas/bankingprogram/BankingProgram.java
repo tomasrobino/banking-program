@@ -8,39 +8,47 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class BankingProgram {
-
 	public static void main(String[] args) {
 		SpringApplication.run(BankingProgram.class, args);
-        MySQL.meth();
 		String name, surname;
-        int pin;
+        int pin=0;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome!");
-        System.out.println("Please identify yourself, if you have yet to open an account, leave the field blank");
-        System.out.println("First and Middle names:");
-        name = scanner.nextLine();
-        if (name == null) {
+        MySQL authenticator;
+        int userId;
+        do {
+            System.out.println("Please identify yourself, if you have yet to open an account, leave the field blank");
+            System.out.println("First and Middle names:");
+            name = scanner.nextLine();
+            //Go to user registration
+            if (name == null) {
+                //TODO: user registration
+                authenticator=null;
+                
+            //Go to user authentication
+            } else {
+                System.out.println("Surname:");
+                surname = scanner.nextLine();
+                System.out.println("PIN:");
+                int aux = 0;
 
-        } else {
-            System.out.println("Surname:");
-            surname = scanner.nextLine();
-            System.out.println("PIN:");
+                do {
+                    try {
+                        pin = scanner.nextInt();
+                        aux=1;
+                    } catch(InputMismatchException e) {
+                        System.out.println("Error in PIN, please reintroduce:");
+                        scanner.nextLine();
+                    }
+                } while(aux == 0);
+                //TODO: Check if credentials are correct
+                authenticator = new MySQL(name, surname, pin);
+            }
+            scanner.nextLine();
+            userId = authenticator.authenticate();
+        } while(userId<0);
 
-            int aux = 0;
-
-            do {
-                try {
-                    pin = scanner.nextInt();
-                    aux=1;
-                } catch(InputMismatchException e) {
-                    System.out.println("Error in PIN, please reintroduce:");
-                    scanner.nextLine();
-                }
-            } while(aux == 0);
-
-            //Check if credentials are correct
-            
-        }
+        //From this point on user is authenticated
+        System.out.println("Authentication successful.");
 	}
-
 }

@@ -2,21 +2,48 @@ package com.tomas.bankingprogram;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 
-public class MySQL {
-    public static void meth() {
-        String url = "jdbc:mysql://localhost:3306/bank";
-        String user = "tomas";
-        String password = "password";
+final class MySQL {
+    private final String URL = "jdbc:mysql://localhost:3306/bank";
+    private final String USER = "tomas";
+    private final String PASSWORD = "password";
 
-        try(Connection connection = DriverManager.getConnection(url, user, password);) {
-            System.out.println("Success!");
+    private String name, surname;
+    private int pin;
+
+    MySQL(String name, String surname, int pin) {
+        this.name = name;
+        this.surname = surname;
+        this.pin = pin;
+    }
+
+    //This method checks user authentication
+    //Returns user id if user is found or -1 if not
+    public final int authenticate() {
+        try {
+            //Initiate connection to database;
+            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            Statement stmt = connection.createStatement();
+            //Get user id;
+            ResultSet rs = stmt.executeQuery(
+                "SELECT id FROM users WHERE first_name = '"+name+"' AND surname = '"+surname+"' AND pin = '"+pin+"'"
+            );
+            if(rs.next()) {
+                //User found
+                int id = rs.getInt("id");
+                connection.close();
+                return id;
+            }
+            //User not found
+            connection.close();
+            return -1;
+
         } catch (SQLException e) {
-            System.out.println("Failure.");
+            throw new IllegalStateException("Cannot connect to database!", e);
         }
     }
-    
-    
 }
