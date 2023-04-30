@@ -72,17 +72,14 @@ public class BankingProgram {
         }
     }
 
-    private static boolean register(User currentUser) {
-        credentials(); //Asks for credentials
-        //Checks credentials with SQL server
-        currentUser = MySQL.authenticate(
-            currentUser.getName(), currentUser.getSurname(), currentUser.getPin()
-        );
-        if (currentUser.getId()<0) {
-            System.out.println("Authentication error");
-            return false;
+    private static User register() {
+        String[] arr = credentials(); //Asks for credentials
+        if (!MySQL.check(arr[0], arr[1])) {
+            //Create user with given credentials
+            return MySQL.newUser(arr[0], arr[1], Integer.parseInt(arr[2]));
         } else {
-            return true;
+            //User already exists
+            return new User(-1);
         }
     }
 
@@ -109,8 +106,15 @@ public class BankingProgram {
                         aux=-1;
                     }
                 } else {
-                    //TODO: User registration
-                    register(currentUser);
+                    boolean aux1 = true;
+                    while(aux1) {
+                        currentUser = register();
+                        if (currentUser.getId() != -1) {
+                            aux1=false;
+                        } else {
+                            System.out.println("There's already a user with that name, try again:");
+                        }
+                    }
                 }
             } catch (InputMismatchException e) {
                 aux=-1;
