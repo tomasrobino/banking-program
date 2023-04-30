@@ -3,9 +3,9 @@ package com.tomas.bankingprogram;
 public class Account {
     private final int id;
     private int type, owner_id;
-    private float balance;
+    private double balance;
 
-    public Account(int id, int type, int owner_id, float balance) {
+    public Account(int id, int type, int owner_id, double balance) {
         this.id = id;
         this.type = type;
         this.owner_id = owner_id;
@@ -27,7 +27,7 @@ public class Account {
     public void setOwner_id(int owner_id) {
         this.owner_id = owner_id;
     }
-    public float getBalance() {
+    public double getBalance() {
         return balance;
     }
     public void setBalance(float balance) {

@@ -1,15 +1,23 @@
 package com.tomas.bankingprogram;
 
+import java.util.ArrayList;
+
 public class User {
     private final int id;
     private int pin;
     private String name, surname;
+    private ArrayList<Account> accountList = new ArrayList<>();
 
-    User(int id, String name, String surname, int pin) {
+    User(int id, String name, String surname, int pin, ArrayList<Account> accountList) {
         this.id = id;
         this.pin = pin;
         this.name = name;
         this.surname = surname;
+        this.accountList = accountList;
+    }
+
+    User(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -48,5 +56,13 @@ public class User {
 
     public boolean withdraw() {
         return true;
+    }
+
+    public ArrayList<Account> getAccountList() {
+        return accountList;
+    }
+
+    public void setAccountList(ArrayList<Account> accountList) {
+        this.accountList = accountList;
     }
 }

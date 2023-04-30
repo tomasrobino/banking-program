@@ -14,8 +14,8 @@ public class BankingProgram {
         int pin=0;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome!");
-        MySQL authenticator;
-        int userId;
+        MySQL sql;
+        User currentUser;
         do {
             System.out.println("Please identify yourself, if you have yet to open an account, leave the field blank");
             System.out.println("First and Middle names:");
@@ -23,7 +23,7 @@ public class BankingProgram {
             //Go to user registration
             if (name == null) {
                 //TODO: user registration
-                authenticator=null;
+                sql=null;
                 
             //Go to user authentication
             } else {
@@ -41,13 +41,24 @@ public class BankingProgram {
                         scanner.nextLine();
                     }
                 } while(aux == 0);
-                authenticator = new MySQL(name, surname, pin);
+                sql = new MySQL(name, surname, pin);
             }
             scanner.nextLine();
-            userId = authenticator.authenticate();
-        } while(userId<0);
+            currentUser = sql.authenticate();
+            if (currentUser.getId()<0) System.out.println("Authentication error. Please try again");
+        } while(currentUser.getId()<0);
 
         //From this point on user is authenticated
         System.out.println("Authentication successful.");
+
+        if (currentUser.getAccountList().size()>0) {
+            //User first has to select account on which to operate
+            //TODO: Account selector
+        } else {
+            //User has no account open
+            //TODO: Open account system
+        }
+
+        //System.out.println("Please write 1 if you wish to review your balance, 2 to add funds, 3 to withdraw");
 	}
 }
