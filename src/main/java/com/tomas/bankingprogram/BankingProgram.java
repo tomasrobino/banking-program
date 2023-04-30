@@ -76,7 +76,8 @@ public class BankingProgram {
             } else if(op == 2 || op == 3) {
                 System.out.println("Please introduce amount:");
                 amnt = scanner.nextDouble();
-                
+                accSel.changeBalance(amnt);
+                System.out.println("Your new balance is $"+accSel.getBalance());
             }
         } else {
             //User has no account open
