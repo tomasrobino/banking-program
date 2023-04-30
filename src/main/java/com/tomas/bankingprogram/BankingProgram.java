@@ -8,16 +8,13 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class BankingProgram {
-    //Asking for and checking user credentials
-    private static boolean credentials(User currentUser) {
+    private static String[] credentials() {
         String name=null;
         String surname=null;
-        int pin=0;
+        Integer pin=0;
         
         Scanner scanner = new Scanner(System.in);
         int aux = 0;
-
-        System.out.println("Please identify yourself");
 
         System.out.println("First and Middle names:");
         do {
@@ -57,7 +54,30 @@ public class BankingProgram {
         } while(aux == 0);
         scanner.close();
 
-        currentUser = MySQL.authenticate(name, surname, pin);
+        String[] arr = {name, surname, pin.toString()};
+        return arr;
+    }
+
+    //Asking for and checking user credentials
+    private static boolean auth(String[] arr) {
+        //Checks credentials with SQL server
+        User currentUser = MySQL.authenticate(
+            arr[0], arr[1], Integer.parseInt(arr[2])
+        );
+        if (currentUser.getId()<0) {
+            System.out.println("Authentication error");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private static boolean register(User currentUser) {
+        credentials(); //Asks for credentials
+        //Checks credentials with SQL server
+        currentUser = MySQL.authenticate(
+            currentUser.getName(), currentUser.getSurname(), currentUser.getPin()
+        );
         if (currentUser.getId()<0) {
             System.out.println("Authentication error");
             return false;
@@ -81,7 +101,8 @@ public class BankingProgram {
                 aux=scanner.nextInt();
                 scanner.nextLine();
                 if (aux==1) {
-                    if(credentials(currentUser)) {
+                    //Asking for credentials and authenticating them
+                    if(auth(credentials())) {
                         currentUser.setAccountList(MySQL.getUserAccounts(currentUser.getId()));
                     } else {
                         System.out.println("User does not exist");
@@ -89,7 +110,7 @@ public class BankingProgram {
                     }
                 } else {
                     //TODO: User registration
-                    currentUser=null;
+                    register(currentUser);
                 }
             } catch (InputMismatchException e) {
                 aux=-1;
