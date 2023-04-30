@@ -41,28 +41,20 @@ public class User {
     public void setSurname(String surname) {
         this.surname = surname;
     }
+    public ArrayList<Account> getAccountList() {
+        return accountList;
+    }
+    public void setAccountList(ArrayList<Account> accountList) {
+        this.accountList = accountList;
+    }
 
+
+    
     public boolean deleteUser(String name, String surname, int pin) {
         return true;
     }
 
     public boolean openAccount(String name, String surname, int pin, int type) {
         return true;
-    }
-
-    public boolean deposit() {
-        return true;
-    }
-
-    public boolean withdraw() {
-        return true;
-    }
-
-    public ArrayList<Account> getAccountList() {
-        return accountList;
-    }
-
-    public void setAccountList(ArrayList<Account> accountList) {
-        this.accountList = accountList;
     }
 }

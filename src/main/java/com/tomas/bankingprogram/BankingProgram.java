@@ -54,11 +54,33 @@ public class BankingProgram {
         if (currentUser.getAccountList().size()>0) {
             //User first has to select account on which to operate
             //TODO: Account selector
+
+            //Generating console prompt for selecting account
+            String consoleString = "Please";
+            for(int i=0;i<currentUser.getAccountList().size();i++) {
+                consoleString+=", write "+(i+1)+" for account number "+currentUser.getAccountList().get(i).getId();
+            }
+            System.out.println(consoleString);
+            System.out.println("If you wish to open another account, write -1");
+            Account accSel = currentUser.getAccountList().get(scanner.nextInt()-1);
+            scanner.nextLine();
+            System.out.println("You have selected account #"+accSel.getId());
+
+            //Choosing operation to do on selected account
+            System.out.println("Please write 1 if you wish to review your balance, 2 to add funds, 3 to withdraw");
+            
+            int op = scanner.nextInt();
+            double amnt;
+            if (op == 1) {
+                System.out.println("Your balance is: "+accSel.getBalance());
+            } else if(op == 2 || op == 3) {
+                System.out.println("Please introduce amount:");
+                amnt = scanner.nextDouble();
+                
+            }
         } else {
             //User has no account open
             //TODO: Open account system
         }
-
-        //System.out.println("Please write 1 if you wish to review your balance, 2 to add funds, 3 to withdraw");
 	}
 }
