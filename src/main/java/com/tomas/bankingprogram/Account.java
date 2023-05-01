@@ -34,9 +34,8 @@ public class Account {
             ArrayList<Account> receiverAccs = MySQL.getUserAccounts(receiverUserId);
             for (Account i : receiverAccs) {
                 if (i.getId() == second_id) {
-                    this.balance -= amount;
+                    changeBalance(-amount);
                     i.changeBalance(amount);
-                    MySQL.updateAccount(amount, i.getId());
                     return true;
                 }
             }

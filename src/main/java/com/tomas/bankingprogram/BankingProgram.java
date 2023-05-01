@@ -8,12 +8,11 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class BankingProgram {
-    private static String[] credentials() {
+    private static String[] credentials(Scanner scanner) {
         String name=null;
         String surname=null;
         Integer pin=0;
         
-        Scanner scanner = new Scanner(System.in);
         int aux = 0;
 
         System.out.println("First and Middle names:");
@@ -67,8 +66,8 @@ public class BankingProgram {
         }
     }
 
-    private static User register() {
-        String[] arr = credentials(); //Asks for credentials
+    private static User register(Scanner scanner) {
+        String[] arr = credentials(scanner); //Asks for credentials
         if (!MySQL.check(arr[0], arr[1])) {
             //Create user with given credentials
             return MySQL.newUser(arr[0], arr[1], Integer.parseInt(arr[2]));
@@ -94,7 +93,7 @@ public class BankingProgram {
                 scanner.nextLine();
                 if (aux==1) {
                     //Asking for credentials and authenticating them
-                    currentUser = auth(credentials());
+                    currentUser = auth(credentials(scanner));
                     if(currentUser.getId()>-1) {
                         currentUser.setAccountList(MySQL.getUserAccounts(currentUser.getId()));
                     } else {
@@ -104,7 +103,7 @@ public class BankingProgram {
                 } else if(aux == 0) {
                     boolean aux1 = true;
                     while(aux1) {
-                        currentUser = register();
+                        currentUser = register(scanner);
                         if (currentUser.getId() != -1) {
                             aux1=false;
                         } else {
@@ -135,7 +134,7 @@ public class BankingProgram {
                 //Generating console prompt for selecting account
                 String consoleString = "Please";
                 for(int i=0;i<currentUser.getAccountList().size();i++) {
-                    consoleString+=", write "+(i+1)+" for account number "+currentUser.getAccountList().get(i).getId();
+                    consoleString+=", write "+(i+1)+" for account #"+currentUser.getAccountList().get(i).getId();
                 }
                 System.out.println(consoleString);
                 System.out.println("If you wish to open another account, write 0");
@@ -158,9 +157,14 @@ public class BankingProgram {
                         if (op == 2) {
                             accSel.changeBalance(scanner.nextDouble());
                         } else {
-                            accSel.changeBalance(-scanner.nextDouble());
+                            double wd = scanner.nextDouble();
+                            if(accSel.getBalance() >= wd) {
+                                accSel.changeBalance(-wd);
+                            } else {
+                                System.out.println("Error. Insufficient funds");
+                            }
                         }
-                        System.out.println("Your new balance is $"+accSel.getBalance());
+                        System.out.println("Your balance is $"+accSel.getBalance());
                     } else if(op == 4) {
                         boolean status1 = false;
                         do {
@@ -170,9 +174,14 @@ public class BankingProgram {
                             System.out.println("Please write the amount:");
                             int aux2 = scanner.nextInt();
                             scanner.nextLine();
-                            status1 = accSel.transfer(aux1, aux2);
-                            if(status1 == false) {
-                                System.out.println("Error. Please try again");
+                            if (accSel.getBalance() >= aux2) {
+                                status1 = accSel.transfer(aux1, aux2);
+                                if(status1 == false) {
+                                    System.out.println("Error. Please try again");
+                                }
+                            } else {
+                                System.out.println("Error. Insufficient funds");
+                                status1 = true;
                             }
                         } while(!status1);
                     }
