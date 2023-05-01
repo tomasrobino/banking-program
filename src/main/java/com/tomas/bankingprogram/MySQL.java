@@ -193,7 +193,7 @@ final class MySQL {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             //Insert new account into database table
             PreparedStatement stmt = connection.prepareStatement("INSERT INTO accounts(owner_id, balance, type) VALUES(?, 0.0, 0)");
-            stmt.setInt(3, id);
+            stmt.setInt(1, id);
             stmt.execute();
             connection.close();
         } catch (SQLException e) {

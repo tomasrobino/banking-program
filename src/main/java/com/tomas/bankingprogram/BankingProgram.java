@@ -54,16 +54,16 @@ public class BankingProgram {
     }
 
     //Asking for and checking user credentials
-    private static boolean auth(String[] arr) {
+    private static User auth(String[] arr) {
         //Checks credentials with SQL server
         User currentUser = MySQL.authenticate(
             arr[0], arr[1], Integer.parseInt(arr[2])
         );
         if (currentUser.getId()<0) {
             System.out.println("Authentication error");
-            return false;
+            return new User(-1);
         } else {
-            return true;
+            return currentUser;
         }
     }
 
@@ -94,7 +94,8 @@ public class BankingProgram {
                 scanner.nextLine();
                 if (aux==1) {
                     //Asking for credentials and authenticating them
-                    if(auth(credentials())) {
+                    currentUser = auth(credentials());
+                    if(currentUser.getId()>-1) {
                         currentUser.setAccountList(MySQL.getUserAccounts(currentUser.getId()));
                     } else {
                         System.out.println("User does not exist");
@@ -181,10 +182,9 @@ public class BankingProgram {
                     System.out.println("New account created");
                 }
             } else {
-                System.out.println("You do not have any accounts open. Write 1 to open one");
                 //User has no account open
                 MySQL.newAccount(currentUser.getId());
-                System.out.println("New account created");
+                System.out.println("You had no accounts open. New account created");
             }
 
             System.out.println("Do you wish to do something else?");
