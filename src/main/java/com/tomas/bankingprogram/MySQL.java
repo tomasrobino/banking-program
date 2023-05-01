@@ -69,19 +69,18 @@ final class MySQL {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
             //Get accounts owned by that user
-            PreparedStatement stmt = connection.prepareStatement("SELECT 'id','balance','type' FROM accounts WHERE 'owner_id'=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT 'id', 'balance' FROM accounts WHERE 'owner_id'=?");
             stmt.setInt(1, id);
             ResultSet rsAcc = stmt.executeQuery();
 
-            int accId, type;
+            int accId;
             double balance;
 
             ArrayList<Account> userAccounts = new ArrayList<>();
             while(rsAcc.next()) {
                 accId = rsAcc.getInt("id");
-                type = rsAcc.getInt("type");
                 balance = rsAcc.getDouble("balance");
-                userAccounts.add(new Account(accId, type, id, balance));
+                userAccounts.add(new Account(accId, id, balance));
             }
             connection.close();
             return userAccounts;
@@ -178,6 +177,20 @@ final class MySQL {
             PreparedStatement stmt = connection.prepareStatement("UPDATE accounts SET 'balance'='balance'+? WHERE 'id'=?");
             stmt.setDouble(1, amount);
             stmt.setInt(2, id);
+            stmt.execute();
+            connection.close();
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot connect to database!", e);
+        }
+    }
+
+    public static final void newAccount(int id) {
+        try {
+            //Initiate connection to database;
+            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+            //Insert new account into database table
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO accounts('owner_id', 'balance', 'type') VALUES(?, 0.0, 0)");
+            stmt.setInt(3, id);
             stmt.execute();
             connection.close();
         } catch (SQLException e) {

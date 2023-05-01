@@ -91,7 +91,7 @@ public class BankingProgram {
         //Start of console dialog
         System.out.println("Welcome!");
         int aux;
-        System.out.println("If you already have an account, write 1, if you do not, write 0");
+        System.out.println("If you are already registered, write 1, if you are not, write 0");
         //Checking answer, if not 1 or 0, tries again
         do {
             try {
@@ -105,7 +105,7 @@ public class BankingProgram {
                         System.out.println("User does not exist");
                         aux=-1;
                     }
-                } else {
+                } else if(aux == 0) {
                     boolean aux1 = true;
                     while(aux1) {
                         currentUser = register();
@@ -115,7 +115,7 @@ public class BankingProgram {
                             System.out.println("There's already a user with that name, try again:");
                         }
                     }
-                }
+                } else aux = -1;
             } catch (InputMismatchException e) {
                 aux=-1;
             }
@@ -125,7 +125,7 @@ public class BankingProgram {
                 System.out.println("If you already have an account, write 1, if you do not, write 0");
             }
             
-        } while (currentUser.getId()<0);
+        } while (aux == -1);
 
         //From this point on user is authenticated
         System.out.println("Authentication successful.");
@@ -178,13 +178,15 @@ public class BankingProgram {
                     } while(!status1);
                 }
             } else {
-                //User wants to open new account
-                //TODO: Open account system
+                //Open new account
+                MySQL.newAccount(currentUser.getId());
+                System.out.println("New account created");
             }
         } else {
             System.out.println("You do not have any accounts open. Write 1 to open one");
             //User has no account open
-            //TODO: Open account system
+            MySQL.newAccount(currentUser.getId());
+            System.out.println("New account created");
         }
 
         scanner.close();
