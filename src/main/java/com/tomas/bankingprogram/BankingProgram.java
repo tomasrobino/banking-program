@@ -188,6 +188,7 @@ public class BankingProgram {
                 } else {
                     //Open new account
                     MySQL.newAccount(currentUser.getId());
+                    currentUser.setAccountList(MySQL.getUserAccounts(currentUser.getId()));
                     System.out.println("New account created");
                 }
             } else {
