@@ -1,5 +1,7 @@
 package com.tomas.bankingprogram;
 
+import java.util.ArrayList;
+
 public class Account {
     private final int id, type, owner_id;
     private double balance;
@@ -27,6 +29,26 @@ public class Account {
     }
     public void changeBalance(double balance) {
         this.balance += balance;
+        MySQL.updateAccount(balance, this.id);
+    }
+
+    public boolean transfer(int second_id, double amount) {
+        try {
+            int receiverUserId = MySQL.findUserByAccount(second_id);
+            ArrayList<Account> receiverAccs = MySQL.getUserAccounts(receiverUserId);
+            for (Account i : receiverAccs) {
+                if (i.getId() == second_id) {
+                    this.balance -= amount;
+                    i.changeBalance(amount);
+                    MySQL.updateAccount(amount, i.getId());
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+        
     }
     
 }

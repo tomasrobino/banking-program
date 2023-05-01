@@ -22,7 +22,7 @@ final class MySQL {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
             //Get user id;
-            PreparedStatement stmt = connection.prepareStatement("SELECT id FROM users WHERE ? and ? and ?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT 'id' FROM users WHERE 'first_name'=? and 'surname'=? and 'pin'=?");
             stmt.setString(1, name);
             stmt.setString(2, surname);
             stmt.setInt(3, pin);
@@ -67,15 +67,14 @@ final class MySQL {
         try {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            Statement stmt = connection.createStatement();
+
+            //Get accounts owned by that user
+            PreparedStatement stmt = connection.prepareStatement("SELECT 'id','balance','type' FROM accounts WHERE 'owner_id'=?");
+            stmt.setInt(1, id);
+            ResultSet rsAcc = stmt.executeQuery();
 
             int accId, type;
             double balance;
-
-            //Get accounts owned by that user
-            ResultSet rsAcc = stmt.executeQuery(
-                "SELECT 'id','balance','type' FROM accounts WHERE owner_id = '"+id+"' "
-            );
 
             ArrayList<Account> userAccounts = new ArrayList<>();
             while(rsAcc.next()) {
@@ -98,14 +97,14 @@ final class MySQL {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             //Insert new user into database table
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO users(first_name, surname, pin) VALUES(?, ?, ?");
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO users('first_name', 'surname', 'pin') VALUES(?, ?, ?");
             stmt.setString(1, name);
             stmt.setString(2, surname);
             stmt.setInt(3, pin);
             stmt.execute();
 
             //Get newly-created User's id
-            stmt = connection.prepareStatement("SELECT id FROM users WHERE ? and ? and ?");
+            stmt = connection.prepareStatement("SELECT 'id' FROM users WHERE 'first_name'=? and 'surname'=? and 'pin'=?");
             stmt.setString(1, name);
             stmt.setString(2, surname);
             stmt.setInt(3, pin);
@@ -115,6 +114,72 @@ final class MySQL {
 
             //Return newly created User's object
             return new User(id, name, surname, pin);
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot connect to database!", e);
+        }
+    }
+
+    public static final int findUserByAccount(int accId) {
+        try {
+            //Initiate connection to database
+            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            //Get user id
+            PreparedStatement stmt = connection.prepareStatement("SELECT 'owner_id' FROM accounts WHERE 'id'=?");
+            stmt.setInt(1, accId);
+            ResultSet rs = stmt.executeQuery(); 
+            
+            if(rs.next()) {
+                //User id found
+                int id = rs.getInt("owner_id");
+                connection.close();
+                return id;
+            }
+            //User id not found
+            connection.close();
+            return 1;
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot connect to database!", e);
+        }
+    }
+
+    public static final User getUserById(int id) {
+        try {
+            //Initiate connection to database
+            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            //Get user id
+            PreparedStatement stmt = connection.prepareStatement("SELECT 'first_name', 'surname', 'pin' FROM users WHERE 'id'=?");
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery(); 
+            
+            if(rs.next()) {
+                //User found
+                String name = rs.getString("first_name");
+                String surname = rs.getString("surname");
+                int pin = rs.getInt("pin");
+                connection.close();
+                return new User(id, name, surname, pin);
+            }
+            //User not found
+            connection.close();
+            return new User(-1);
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot connect to database!", e);
+        }
+    }
+
+    public static final void updateAccount(double amount, int id) {
+        try {
+            //Initiate connection to database
+            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            //Get user id
+            PreparedStatement stmt = connection.prepareStatement("UPDATE accounts SET 'balance'='balance'+? WHERE 'id'=?");
+            stmt.setDouble(1, amount);
+            stmt.setInt(2, id);
+            stmt.execute();
+            connection.close();
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect to database!", e);
         }

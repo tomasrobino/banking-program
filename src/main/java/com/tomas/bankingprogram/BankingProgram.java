@@ -156,10 +156,26 @@ public class BankingProgram {
                     System.out.println("Your balance is: "+accSel.getBalance());
                 } else if(op == 2 || op == 3) {
                     System.out.println("Please introduce amount:");
-                    accSel.changeBalance(scanner.nextDouble());
+                    if (op == 2) {
+                        accSel.changeBalance(scanner.nextDouble());
+                    } else {
+                        accSel.changeBalance(-scanner.nextDouble());
+                    }
                     System.out.println("Your new balance is $"+accSel.getBalance());
                 } else if(op == 4) {
-                    //TODO: Transfer funds system
+                    boolean status1 = false;
+                    do {
+                        System.out.println("Please write the number of the account you wish to transfer funds to:");
+                        int aux1 = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.println("Please write the amount:");
+                        int aux2 = scanner.nextInt();
+                        scanner.nextLine();
+                        status1 = accSel.transfer(aux1, aux2);
+                        if(status1 == false) {
+                            System.out.println("Error. Please try again");
+                        }
+                    } while(!status1);
                 }
             } else {
                 //User wants to open new account
