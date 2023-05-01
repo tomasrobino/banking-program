@@ -48,7 +48,6 @@ public class BankingProgram {
                 scanner.nextLine();
             }
         } while(aux == 0);
-        scanner.close();
 
         String[] arr = {name, surname, pin.toString()};
         return arr;
