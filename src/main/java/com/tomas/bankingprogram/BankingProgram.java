@@ -130,64 +130,77 @@ public class BankingProgram {
         //From this point on user is authenticated
         System.out.println("Authentication successful.");
 
-        if (currentUser.getAccountList().size()>0) {
-            //User first has to select account on which to operate
-
-            //Generating console prompt for selecting account
-            String consoleString = "Please";
-            for(int i=0;i<currentUser.getAccountList().size();i++) {
-                consoleString+=", write "+(i+1)+" for account number "+currentUser.getAccountList().get(i).getId();
-            }
-            System.out.println(consoleString);
-            System.out.println("If you wish to open another account, write 0");
-
-            int sel = scanner.nextInt()-1;
-            scanner.nextLine();
-            //Check action user wants to do
-            if(sel > -1){
-                //Selected account
-                Account accSel = currentUser.getAccountList().get(sel);
-                System.out.println("You have selected account #"+accSel.getId());
-
-                //Choosing operation to do on selected account
-                System.out.println("Please write 1 if you wish to review your balance, 2 to add funds, 3 to withdraw, 4 to transfer funds");
-                int op = scanner.nextInt();
-                if(op == 1) {
-                    System.out.println("Your balance is: "+accSel.getBalance());
-                } else if(op == 2 || op == 3) {
-                    System.out.println("Please introduce amount:");
-                    if (op == 2) {
-                        accSel.changeBalance(scanner.nextDouble());
-                    } else {
-                        accSel.changeBalance(-scanner.nextDouble());
-                    }
-                    System.out.println("Your new balance is $"+accSel.getBalance());
-                } else if(op == 4) {
-                    boolean status1 = false;
-                    do {
-                        System.out.println("Please write the number of the account you wish to transfer funds to:");
-                        int aux1 = scanner.nextInt();
-                        scanner.nextLine();
-                        System.out.println("Please write the amount:");
-                        int aux2 = scanner.nextInt();
-                        scanner.nextLine();
-                        status1 = accSel.transfer(aux1, aux2);
-                        if(status1 == false) {
-                            System.out.println("Error. Please try again");
+        boolean st = false;
+        do {
+            if (currentUser.getAccountList().size()>0) {
+                //User first has to select account on which to operate
+    
+                //Generating console prompt for selecting account
+                String consoleString = "Please";
+                for(int i=0;i<currentUser.getAccountList().size();i++) {
+                    consoleString+=", write "+(i+1)+" for account number "+currentUser.getAccountList().get(i).getId();
+                }
+                System.out.println(consoleString);
+                System.out.println("If you wish to open another account, write 0");
+    
+                int sel = scanner.nextInt()-1;
+                scanner.nextLine();
+                //Check action user wants to do
+                if(sel > -1){
+                    //Selected account
+                    Account accSel = currentUser.getAccountList().get(sel);
+                    System.out.println("You have selected account #"+accSel.getId());
+    
+                    //Choosing operation to do on selected account
+                    System.out.println("Please write 1 if you wish to review your balance, 2 to add funds, 3 to withdraw, 4 to transfer funds");
+                    int op = scanner.nextInt();
+                    if(op == 1) {
+                        System.out.println("Your balance is: "+accSel.getBalance());
+                    } else if(op == 2 || op == 3) {
+                        System.out.println("Please introduce amount:");
+                        if (op == 2) {
+                            accSel.changeBalance(scanner.nextDouble());
+                        } else {
+                            accSel.changeBalance(-scanner.nextDouble());
                         }
-                    } while(!status1);
+                        System.out.println("Your new balance is $"+accSel.getBalance());
+                    } else if(op == 4) {
+                        boolean status1 = false;
+                        do {
+                            System.out.println("Please write the number of the account you wish to transfer funds to:");
+                            int aux1 = scanner.nextInt();
+                            scanner.nextLine();
+                            System.out.println("Please write the amount:");
+                            int aux2 = scanner.nextInt();
+                            scanner.nextLine();
+                            status1 = accSel.transfer(aux1, aux2);
+                            if(status1 == false) {
+                                System.out.println("Error. Please try again");
+                            }
+                        } while(!status1);
+                    }
+                } else {
+                    //Open new account
+                    MySQL.newAccount(currentUser.getId());
+                    System.out.println("New account created");
                 }
             } else {
-                //Open new account
+                System.out.println("You do not have any accounts open. Write 1 to open one");
+                //User has no account open
                 MySQL.newAccount(currentUser.getId());
                 System.out.println("New account created");
             }
-        } else {
-            System.out.println("You do not have any accounts open. Write 1 to open one");
-            //User has no account open
-            MySQL.newAccount(currentUser.getId());
-            System.out.println("New account created");
-        }
+
+            System.out.println("Do you wish to do something else?");
+            System.out.println("Write 1 for yes and 0 for no");
+            try {
+                if (scanner.nextInt()==1) {
+                    st = false;
+                } else st = true;
+            } catch (InputMismatchException e) {
+                st = true;
+            }
+        } while (!st);
 
         scanner.close();
 	}
