@@ -23,10 +23,8 @@ public class BankingProgram {
                 aux=1;
             } catch(InputMismatchException e) {
                 System.out.println("Error in name, please reintroduce:");
-                scanner.nextLine();
             }
         } while(aux == 0);
-        scanner.nextLine();
         aux=0;
 
         System.out.println("Surname:");
@@ -36,10 +34,8 @@ public class BankingProgram {
                 aux=1;
             } catch(InputMismatchException e) {
                 System.out.println("Error in surname, please reintroduce:");
-                scanner.nextLine();
             }
         } while(aux == 0);
-        scanner.nextLine();
         aux=0;
         
         System.out.println("PIN:");
@@ -90,9 +86,9 @@ public class BankingProgram {
 
         //Start of console dialog
         System.out.println("Welcome!");
-        int aux;
         System.out.println("If you are already registered, write 1, if you are not, write 0");
         //Checking answer, if not 1 or 0, tries again
+        int aux=-1;
         do {
             try {
                 aux=scanner.nextInt();
@@ -118,9 +114,10 @@ public class BankingProgram {
                 } else aux = -1;
             } catch (InputMismatchException e) {
                 aux=-1;
+                scanner.nextLine();
             }
 
-            if (aux!=1 || aux!=0) {
+            if (!(aux==1 || aux==0)) {
                 System.out.println("Please try again.");
                 System.out.println("If you already have an account, write 1, if you do not, write 0");
             }

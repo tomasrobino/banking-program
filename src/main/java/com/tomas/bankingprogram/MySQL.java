@@ -22,7 +22,7 @@ final class MySQL {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
             //Get user id;
-            PreparedStatement stmt = connection.prepareStatement("SELECT 'id' FROM users WHERE 'first_name'=? and 'surname'=? and 'pin'=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT id FROM users WHERE first_name=? and surname=? and pin=?");
             stmt.setString(1, name);
             stmt.setString(2, surname);
             stmt.setInt(3, pin);
@@ -48,14 +48,16 @@ final class MySQL {
         try {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            Statement stmt = connection.createStatement();
+
             //Get user id;
-            ResultSet rsId = stmt.executeQuery(
-                "SELECT id FROM users WHERE first_name = '"+name+"' AND surname = '"+surname+"'"
-            );
-            connection.close();
+            PreparedStatement stmt = connection.prepareStatement("SELECT id FROM users WHERE first_name=? AND surname=?");
+            stmt.setString(1, name);
+            stmt.setString(2, surname);
+            ResultSet rsId = stmt.executeQuery();
+            
 
             if(rsId.next()) return true; //User found
+            connection.close();
             return false; //User not found
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect to database!", e);
@@ -69,7 +71,7 @@ final class MySQL {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
             //Get accounts owned by that user
-            PreparedStatement stmt = connection.prepareStatement("SELECT 'id', 'balance' FROM accounts WHERE 'owner_id'=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT id, balance FROM accounts WHERE owner_id=?");
             stmt.setInt(1, id);
             ResultSet rsAcc = stmt.executeQuery();
 
@@ -96,22 +98,23 @@ final class MySQL {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             //Insert new user into database table
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO users('first_name', 'surname', 'pin') VALUES(?, ?, ?");
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO users(first_name, surname, pin) VALUES(?, ?, ?)");
             stmt.setString(1, name);
             stmt.setString(2, surname);
             stmt.setInt(3, pin);
             stmt.execute();
 
-            //Get newly-created User's id
-            stmt = connection.prepareStatement("SELECT 'id' FROM users WHERE 'first_name'=? and 'surname'=? and 'pin'=?");
+            //Get newly-created Users id
+            stmt = connection.prepareStatement("SELECT id FROM users WHERE first_name=? and surname=? and pin=?");
             stmt.setString(1, name);
             stmt.setString(2, surname);
             stmt.setInt(3, pin);
             ResultSet rs = stmt.executeQuery();
+            rs.next();
             int id = rs.getInt("id");
             connection.close();
 
-            //Return newly created User's object
+            //Return newly created Users object
             return new User(id, name, surname, pin);
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect to database!", e);
@@ -124,7 +127,7 @@ final class MySQL {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
             //Get user id
-            PreparedStatement stmt = connection.prepareStatement("SELECT 'owner_id' FROM accounts WHERE 'id'=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT owner_id FROM accounts WHERE id=?");
             stmt.setInt(1, accId);
             ResultSet rs = stmt.executeQuery(); 
             
@@ -148,7 +151,7 @@ final class MySQL {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
             //Get user id
-            PreparedStatement stmt = connection.prepareStatement("SELECT 'first_name', 'surname', 'pin' FROM users WHERE 'id'=?");
+            PreparedStatement stmt = connection.prepareStatement("SELECT first_name, surname, pin FROM users WHERE id=?");
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery(); 
             
@@ -174,7 +177,7 @@ final class MySQL {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
 
             //Get user id
-            PreparedStatement stmt = connection.prepareStatement("UPDATE accounts SET 'balance'='balance'+? WHERE 'id'=?");
+            PreparedStatement stmt = connection.prepareStatement("UPDATE accounts SET balance=balance+? WHERE id=?");
             stmt.setDouble(1, amount);
             stmt.setInt(2, id);
             stmt.execute();
@@ -189,7 +192,7 @@ final class MySQL {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
             //Insert new account into database table
-            PreparedStatement stmt = connection.prepareStatement("INSERT INTO accounts('owner_id', 'balance', 'type') VALUES(?, 0.0, 0)");
+            PreparedStatement stmt = connection.prepareStatement("INSERT INTO accounts(owner_id, balance, type) VALUES(?, 0.0, 0)");
             stmt.setInt(3, id);
             stmt.execute();
             connection.close();
