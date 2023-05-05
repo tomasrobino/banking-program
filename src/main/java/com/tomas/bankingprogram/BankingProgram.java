@@ -1,84 +1,19 @@
 package com.tomas.bankingprogram;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-@SpringBootApplication
-public class BankingProgram {
-    private static String[] credentials(Scanner scanner) {
-        String name=null;
-        String surname=null;
-        Integer pin=0;
-        
-        int aux = 0;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-        System.out.println("First and Middle names:");
-        do {
-            try {
-                name = scanner.nextLine();
-                aux=1;
-            } catch(InputMismatchException e) {
-                System.out.println("Error in name, please reintroduce:");
-            }
-        } while(aux == 0);
-        aux=0;
-
-        System.out.println("Surname:");
-        do {
-            try {
-                surname = scanner.nextLine();
-                aux=1;
-            } catch(InputMismatchException e) {
-                System.out.println("Error in surname, please reintroduce:");
-            }
-        } while(aux == 0);
-        aux=0;
-        
-        System.out.println("PIN:");
-        do {
-            try {
-                pin = scanner.nextInt();
-                aux=1;
-            } catch(InputMismatchException e) {
-                System.out.println("Error in PIN, please reintroduce:");
-                scanner.nextLine();
-            }
-        } while(aux == 0);
-
-        String[] arr = {name, surname, pin.toString()};
-        return arr;
-    }
-
-    //Asking for and checking user credentials
-    private static User auth(String[] arr) {
-        //Checks credentials with SQL server
-        User currentUser = MySQL.authenticate(
-            arr[0], arr[1], Integer.parseInt(arr[2])
-        );
-        if (currentUser.getId()<0) {
-            System.out.println("Authentication error");
-            return new User(-1);
-        } else {
-            return currentUser;
-        }
-    }
-
-    private static User register(Scanner scanner) {
-        String[] arr = credentials(scanner); //Asks for credentials
-        if (!MySQL.check(arr[0], arr[1])) {
-            //Create user with given credentials
-            return MySQL.newUser(arr[0], arr[1], Integer.parseInt(arr[2]));
-        } else {
-            //User already exists
-            return new User(-1);
-        }
+public class BankingProgram extends Application{
+    @Override
+    public void start(Stage primaryStage) {
+        // TODO Auto-generated method stub
     }
 
 	public static void main(String[] args) {
-		SpringApplication.run(BankingProgram.class, args);
+        launch(args);
         Scanner scanner = new Scanner(System.in);
         User currentUser = null;
 
@@ -86,7 +21,7 @@ public class BankingProgram {
         System.out.println("Welcome!");
         System.out.println("If you are already registered, write 1, if you are not, write 0");
         //Checking answer, if not 1 or 0, tries again
-        int aux=-1;
+        int aux;
         do {
             try {
                 aux=scanner.nextInt();
@@ -126,15 +61,15 @@ public class BankingProgram {
         //From this point on user is authenticated
         System.out.println("Authentication successful.");
 
-        boolean st = false;
+        boolean st;
         do {
             if (currentUser.getAccountList().size()>0) {
                 //User first has to select account on which to operate
     
                 //Generating console prompt for selecting account
-                String consoleString = "Please";
+                StringBuilder consoleString = new StringBuilder("Please");
                 for(int i=0;i<currentUser.getAccountList().size();i++) {
-                    consoleString+=", write "+(i+1)+" for account #"+currentUser.getAccountList().get(i).getId();
+                    consoleString.append(", write ").append(i + 1).append(" for account #").append(currentUser.getAccountList().get(i).getId());
                 }
                 System.out.println(consoleString);
                 System.out.println("If you wish to open another account, write 0");
@@ -166,7 +101,7 @@ public class BankingProgram {
                         }
                         System.out.println("Your balance is $"+accSel.getBalance());
                     } else if(op == 4) {
-                        boolean status1 = false;
+                        boolean status1;
                         do {
                             System.out.println("Please write the number of the account you wish to transfer funds to:");
                             int aux1 = scanner.nextInt();
@@ -176,7 +111,7 @@ public class BankingProgram {
                             scanner.nextLine();
                             if (accSel.getBalance() >= aux2) {
                                 status1 = accSel.transfer(aux1, aux2);
-                                if(status1 == false) {
+                                if(!status1) {
                                     System.out.println("Error. Please try again");
                                 }
                             } else {
@@ -200,9 +135,7 @@ public class BankingProgram {
             System.out.println("Do you wish to do something else?");
             System.out.println("Write 1 for yes and 0 for no");
             try {
-                if (scanner.nextInt()==1) {
-                    st = false;
-                } else st = true;
+                st = scanner.nextInt() != 1;
             } catch (InputMismatchException e) {
                 st = true;
             }
@@ -210,4 +143,72 @@ public class BankingProgram {
 
         scanner.close();
 	}
+
+    private static String[] credentials(Scanner scanner) {
+        String name=null;
+        String surname=null;
+        int pin=0;
+        
+        int aux = 0;
+
+        System.out.println("First and Middle names:");
+        do {
+            try {
+                name = scanner.nextLine();
+                aux=1;
+            } catch(InputMismatchException e) {
+                System.out.println("Error in name, please reintroduce:");
+            }
+        } while(aux == 0);
+        aux=0;
+
+        System.out.println("Surname:");
+        do {
+            try {
+                surname = scanner.nextLine();
+                aux=1;
+            } catch(InputMismatchException e) {
+                System.out.println("Error in surname, please reintroduce:");
+            }
+        } while(aux == 0);
+        aux=0;
+        
+        System.out.println("PIN:");
+        do {
+            try {
+                pin = scanner.nextInt();
+                aux=1;
+            } catch(InputMismatchException e) {
+                System.out.println("Error in PIN, please reintroduce:");
+                scanner.nextLine();
+            }
+        } while(aux == 0);
+
+        return new String[]{name, surname, Integer.toString(pin)};
+    }
+
+    //Asking for and checking user credentials
+    private static User auth(String[] arr) {
+        //Checks credentials with SQL server
+        User currentUser = MySQL.authenticate(
+            arr[0], arr[1], Integer.parseInt(arr[2])
+        );
+        if (currentUser.getId()<0) {
+            System.out.println("Authentication error");
+            return new User(-1);
+        } else {
+            return currentUser;
+        }
+    }
+
+    private static User register(Scanner scanner) {
+        String[] arr = credentials(scanner); //Asks for credentials
+        if (!MySQL.check(arr[0], arr[1])) {
+            //Create user with given credentials
+            return MySQL.newUser(arr[0], arr[1], Integer.parseInt(arr[2]));
+        } else {
+            //User already exists
+            return new User(-1);
+        }
+    }
 }
