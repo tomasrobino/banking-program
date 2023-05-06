@@ -14,7 +14,7 @@ public class BankingProgram extends Application{
     public void start(Stage stage) {
         try {
             stage.setTitle("Banking Program");
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginregister.fxml"));
             Scene scene = new Scene(root, 1000, 600);
             stage.setScene(scene);
             stage.show();
@@ -200,7 +200,7 @@ public class BankingProgram extends Application{
     }
 
     //Asking for and checking user credentials
-    private static User auth(String[] arr) {
+    public static User auth(String[] arr) {
         //Checks credentials with SQL server
         User currentUser = MySQL.authenticate(
             arr[0], arr[1], Integer.parseInt(arr[2])
@@ -209,6 +209,7 @@ public class BankingProgram extends Application{
             System.out.println("Authentication error");
             return new User(-1);
         } else {
+            System.out.println("Authentication success");
             return currentUser;
         }
     }

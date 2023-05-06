@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tomas.bankingprogram.Controller">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tomas.bankingprogram.LoginRegister">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
          <children>
@@ -17,11 +17,11 @@
             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="First and Middle Name" />
-                  <TextField />
+                  <TextField fx:id="name" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Surname" />
-                  <TextField />
+                  <TextField fx:id="surname" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-                  <PasswordField />
+                  <PasswordField fx:id="password" />
                </children>
             </VBox>
             <Button mnemonicParsing="false" onAction="#login" text="Submit" />
