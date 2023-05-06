@@ -15,7 +15,7 @@ public class User {
         this.surname = surname;
     }
 
-    User(int id) {
+    public User(int id) {
         this.id = id;
     }
 

@@ -29,47 +29,6 @@ public class BankingProgram extends Application{
         Scanner scanner = new Scanner(System.in);
         User currentUser = null;
 
-        //Start of console dialog
-        System.out.println("Welcome!");
-        System.out.println("If you are already registered, write 1, if you are not, write 0");
-        //Checking answer, if not 1 or 0, tries again
-        int aux;
-        do {
-            try {
-                aux=scanner.nextInt();
-                scanner.nextLine();
-                if (aux==1) {
-                    //Asking for credentials and authenticating them
-                    currentUser = auth(credentials(scanner));
-                    if(currentUser.getId()>-1) {
-                        currentUser.setAccountList(MySQL.getUserAccounts(currentUser.getId()));
-                    } else {
-                        System.out.println("User does not exist");
-                        aux=-1;
-                    }
-                } else if(aux == 0) {
-                    boolean aux1 = true;
-                    while(aux1) {
-                        currentUser = register(scanner);
-                        if (currentUser.getId() != -1) {
-                            aux1=false;
-                        } else {
-                            System.out.println("There's already a user with that name, try again:");
-                        }
-                    }
-                } else aux = -1;
-            } catch (InputMismatchException e) {
-                aux=-1;
-                scanner.nextLine();
-            }
-
-            if (!(aux==1 || aux==0)) {
-                System.out.println("Please try again.");
-                System.out.println("If you already have an account, write 1, if you do not, write 0");
-            }
-
-        } while (aux == -1);
-
         //From this point on user is authenticated
         System.out.println("Authentication successful.");
 
@@ -214,14 +173,5 @@ public class BankingProgram extends Application{
         }
     }
 
-    private static User register(Scanner scanner) {
-        String[] arr = credentials(scanner); //Asks for credentials
-        if (!MySQL.check(arr[0], arr[1])) {
-            //Create user with given credentials
-            return MySQL.newUser(arr[0], arr[1], Integer.parseInt(arr[2]));
-        } else {
-            //User already exists
-            return new User(-1);
-        }
-    }
+
 }

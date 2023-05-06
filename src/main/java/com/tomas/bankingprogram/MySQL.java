@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-final class MySQL {
+public final class MySQL {
     private static final String URL = "jdbc:mysql://localhost:3306/bank";
     private static final String USER = "tomas";
     private static final String PASSWORD = "password";
