@@ -1,15 +1,27 @@
 package com.tomas.bankingprogram;
 
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-
 public class BankingProgram extends Application{
     @Override
-    public void start(Stage primaryStage) {
-        // TODO Auto-generated method stub
+    public void start(Stage stage) {
+        try {
+            stage.setTitle("Banking Program");
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
+            Scene scene = new Scene(root, 1000, 600);
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
 	public static void main(String[] args) {
@@ -55,7 +67,7 @@ public class BankingProgram extends Application{
                 System.out.println("Please try again.");
                 System.out.println("If you already have an account, write 1, if you do not, write 0");
             }
-            
+
         } while (aux == -1);
 
         //From this point on user is authenticated
@@ -65,7 +77,7 @@ public class BankingProgram extends Application{
         do {
             if (currentUser.getAccountList().size()>0) {
                 //User first has to select account on which to operate
-    
+
                 //Generating console prompt for selecting account
                 StringBuilder consoleString = new StringBuilder("Please");
                 for(int i=0;i<currentUser.getAccountList().size();i++) {
@@ -73,7 +85,7 @@ public class BankingProgram extends Application{
                 }
                 System.out.println(consoleString);
                 System.out.println("If you wish to open another account, write 0");
-    
+
                 int sel = scanner.nextInt()-1;
                 scanner.nextLine();
                 //Check action user wants to do
@@ -81,7 +93,7 @@ public class BankingProgram extends Application{
                     //Selected account
                     Account accSel = currentUser.getAccountList().get(sel);
                     System.out.println("You have selected account #"+accSel.getId());
-    
+
                     //Choosing operation to do on selected account
                     System.out.println("Please write 1 if you wish to review your balance, 2 to add funds, 3 to withdraw, 4 to transfer funds");
                     int op = scanner.nextInt();
