@@ -8,14 +8,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 
-public final class MySQL {
+final class MySQL {
     private static final String URL = "jdbc:mysql://localhost:3306/bank";
     private static final String USER = "tomas";
     private static final String PASSWORD = "password";
 
     //This method checks user authentication
     //Returns user object if user is found or -1 if not
-    public static final User authenticate(String name, String surname, int pin) {
+    static User authenticate(String name, String surname, int pin) {
         try {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -43,7 +43,7 @@ public final class MySQL {
     }
 
     //Check whether user exists
-    public static final boolean check(String name, String surname) {
+    static boolean check(String name, String surname) {
         try {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -64,7 +64,7 @@ public final class MySQL {
     }
 
     //Getting user accounts
-    public static final ArrayList<Account> getUserAccounts(int id) {
+    static ArrayList<Account> getUserAccounts(int id) {
         try {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -92,7 +92,7 @@ public final class MySQL {
     }
 
     //Adding new user
-    public static final User newUser(String name, String surname, int pin) {
+    static User newUser(String name, String surname, int pin) {
         try {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -120,7 +120,7 @@ public final class MySQL {
         }
     }
 
-    public static final int findUserByAccount(int accId) {
+    static int findUserByAccount(int accId) {
         try {
             //Initiate connection to database
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -144,7 +144,7 @@ public final class MySQL {
         }
     }
 
-    public static final User getUserById(int id) {
+    static User getUserById(int id) {
         try {
             //Initiate connection to database
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -170,7 +170,7 @@ public final class MySQL {
         }
     }
 
-    public static final void updateAccount(double amount, int id) {
+    static void updateAccount(double amount, int id) {
         try {
             //Initiate connection to database
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -186,7 +186,7 @@ public final class MySQL {
         }
     }
 
-    public static final void newAccount(int id) {
+    static void newAccount(int id) {
         try {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
