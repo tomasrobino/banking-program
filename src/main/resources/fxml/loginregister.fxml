@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tomas.bankingprogram.controllers.LoginRegisterController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tomas.bankingprogram.LoginRegisterController">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
          <children>
@@ -20,7 +20,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Surname" />
                   <TextField fx:id="login_surname" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-                  <PasswordField fx:id="login_password" />
+                  <PasswordField fx:id="login_PIN" />
                </children>
             </VBox>
             <Button mnemonicParsing="false" onAction="#login" text="Submit" />
@@ -39,7 +39,7 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Surname" />
                   <TextField fx:id="register_surname" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
-                  <PasswordField fx:id="register_password" />
+                  <PasswordField fx:id="register_PIN" />
                </children>
             </VBox>
             <Button mnemonicParsing="false" onAction="#register" text="Submit" />

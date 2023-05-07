@@ -1,4 +1,4 @@
-package com.tomas.bankingprogram.controllers;
+package com.tomas.bankingprogram;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
