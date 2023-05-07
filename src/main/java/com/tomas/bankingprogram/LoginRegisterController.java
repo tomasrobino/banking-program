@@ -24,26 +24,26 @@ public class LoginRegisterController {
 
     @FXML
     private void login(ActionEvent event) throws IOException {
-        if (auth(new String[]{
-                login_name.getText(), login_surname.getText(), login_PIN.getText()
-        }).getId() != -1) {
-            switchToUserPanel(event);
+        User user = auth(new String[]{ login_name.getText(), login_surname.getText(), login_PIN.getText() });
+        if (user.getId() != -1) {
+            switchToUserPanel(event, user);
         } else System.out.println("fgyukfsdkfks");
     }
 
     @FXML
-    private User register(ActionEvent event) throws IOException {
+    private void register(ActionEvent event) throws IOException {
         if (!MySQL.check(register_name.getText(), register_surname.getText())) {
             //Create user with given credentials
-            switchToUserPanel(event);
-            return MySQL.newUser(register_name.getText(), register_surname.getText(), Integer.parseInt(register_PIN.getText()));
+            User user = MySQL.newUser(register_name.getText(), register_surname.getText(), Integer.parseInt(register_PIN.getText()));
+            switchToUserPanel(event, user);
         } else {
             //User already exists
-            return new User(-1);
+            System.out.println("User already exists, try again");
         }
     }
 
-    private void switchToUserPanel(ActionEvent event) throws IOException {
+    private void switchToUserPanel(ActionEvent event, User user) throws IOException {
+
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/userpanel.fxml"));
         stage = (Stage) ( (Node) event.getSource() ).getScene().getWindow();
         scene = new Scene(root);
@@ -55,6 +55,20 @@ public class LoginRegisterController {
         //Checks credentials with SQL server
         User user = MySQL.authenticate(
                 arr[0], arr[1], Integer.parseInt(arr[2])
+        );
+        if (user.getId()<0) {
+            System.out.println("Authentication error");
+            return new User(-1);
+        } else {
+            System.out.println("Authentication success");
+            return user;
+        }
+    }
+
+    private static User auth(User user) {
+        //Checks credentials with SQL server
+        user = MySQL.authenticate(
+                user.getName(), user.getSurname(), user.getPin()
         );
         if (user.getId()<0) {
             System.out.println("Authentication error");
