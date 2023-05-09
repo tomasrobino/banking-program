@@ -77,11 +77,27 @@ public class UserPanelController {
         stage.show();
     }
 
-    public void withdrawListener(MouseEvent event) {
-
+    public void withdrawListener(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/withdrawpanel.fxml"));
+        //Switches to withdrawpanel fxml file
+        Parent root = loader.load();
+        WithdrawPanelController withdrawPanelController = loader.getController();
+        withdrawPanelController.initialize(accountList.get(selected));
+        stage = (Stage) ( (Node) event.getSource() ).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
-    public void transferListener(MouseEvent event) {
-
+    public void transferListener(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/transferpanel.fxml"));
+        //Switches to transferpanel fxml file
+        Parent root = loader.load();
+        FundPanelController fundPanelController = loader.getController();
+        fundPanelController.initialize(accountList.get(selected));
+        stage = (Stage) ( (Node) event.getSource() ).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 }

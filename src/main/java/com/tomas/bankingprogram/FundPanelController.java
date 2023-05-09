@@ -25,7 +25,7 @@ public class FundPanelController {
         this.account = account;
     }
 
-    public void  confirmListener(ActionEvent event) throws IOException {
+    public void confirmListener(ActionEvent event) throws IOException {
         String fieldText = fundField.getText();
         double balance = -1;
         try {
