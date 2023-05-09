@@ -1,6 +1,7 @@
 package com.tomas.bankingprogram;
 
 import javafx.fxml.FXML;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -11,6 +12,8 @@ public class UserPanelController {
     @FXML
     private GridPane gridPane;
 
+    private int selected;
+
     public void initialize(User user) {
         //Gets all accounts corresponding to user
         ArrayList<Account> accountList = MySQL.getUserAccounts(user.getId());
@@ -20,6 +23,7 @@ public class UserPanelController {
             for (int i = 0; i < 3; i++) {
                 if (counter != accountList.size()) {
                     VBox vBox = new VBox();
+                    vBox.setOnMouseClicked(this::accountClickListener);
                     vBox.getChildren().addAll(
                             new Text( String.valueOf(accountList.get(counter).getId()) ),
                             new Text( String.valueOf(accountList.get(counter).getBalance()) )
@@ -29,5 +33,11 @@ public class UserPanelController {
                 }
             }
         }
+    }
+
+    public void accountClickListener(MouseEvent event) {
+        VBox vBox = (VBox) event.getSource();
+        selected = Integer.parseInt( ( (Text) vBox.getChildren().get(0) ).getText() );
+        System.out.println(selected);
     }
 }
