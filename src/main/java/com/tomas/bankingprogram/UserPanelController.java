@@ -54,7 +54,7 @@ public class UserPanelController {
     }
 
     public void initialize(Account account) {
-        initialize( MySQL.getUserById( MySQL.findUserByAccount(account.getId()) ) );
+        initialize( MySQL.getUserById( account.getOwner_id() ) );
     }
 
     public void accountClickListener(MouseEvent event) {
@@ -93,8 +93,8 @@ public class UserPanelController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/transferpanel.fxml"));
         //Switches to transferpanel fxml file
         Parent root = loader.load();
-        FundPanelController fundPanelController = loader.getController();
-        fundPanelController.initialize(accountList.get(selected));
+        TransferPanelController transferPanelController = loader.getController();
+        transferPanelController.initialize(accountList.get(selected));
         stage = (Stage) ( (Node) event.getSource() ).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

@@ -121,6 +121,7 @@ final class MySQL {
         }
     }
 
+
     static int findUserByAccount(int accId) {
         try {
             //Initiate connection to database
