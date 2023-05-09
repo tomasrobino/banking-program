@@ -13,14 +13,11 @@ import java.io.IOException;
 
 public class LoginRegisterController {
     @FXML
-    private TextField login_name, login_surname, login_PIN, register_name, register_surname, register_PIN;
-    @FXML
     private Stage stage;
     @FXML
     private Scene scene;
     @FXML
-    private Parent root;
-
+    private TextField login_name, login_surname, login_PIN, register_name, register_surname, register_PIN;
 
     @FXML
     private void login(ActionEvent event) throws IOException {
@@ -43,8 +40,11 @@ public class LoginRegisterController {
     }
 
     private void switchToUserPanel(ActionEvent event, User user) throws IOException {
-
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/userpanel.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/userpanel.fxml"));
+        //Switches to userpanel fxml file
+        Parent root = loader.load();
+        UserPanelController userPanelController = loader.getController();
+        userPanelController.initialize(user);
         stage = (Stage) ( (Node) event.getSource() ).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

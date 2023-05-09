@@ -13,8 +13,10 @@ public class BankingProgram extends Application{
     @Override
     public void start(Stage stage) {
         try {
+            //Creates stage and loads first scene
             stage.setTitle("Banking Program");
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/loginregister.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/loginregister.fxml"));
+            Parent root = loader.load();
             Scene scene = new Scene(root, 1000, 600);
             stage.setScene(scene);
             stage.show();
