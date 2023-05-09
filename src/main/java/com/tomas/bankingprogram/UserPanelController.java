@@ -1,43 +1,87 @@
 package com.tomas.bankingprogram;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class UserPanelController {
+    private int selected;
     @FXML
     private GridPane gridPane;
+    @FXML
+    private Stage stage;
+    @FXML
+    private Scene scene;
+    @FXML
+    private Button fund, withdraw, transfer;
 
-    private int selected;
+    private HashMap<Integer, Account> accountList;
 
     public void initialize(User user) {
         //Gets all accounts corresponding to user
-        ArrayList<Account> accountList = MySQL.getUserAccounts(user.getId());
-        int counter = 0;
+         accountList = MySQL.getUserAccounts(user.getId());
         //Displays them graphically in gridPane
-        for (int k = 0; k < 3; k++) {
-            for (int i = 0; i < 3; i++) {
-                if (counter != accountList.size()) {
-                    VBox vBox = new VBox();
-                    vBox.setOnMouseClicked(this::accountClickListener);
-                    vBox.getChildren().addAll(
-                            new Text( String.valueOf(accountList.get(counter).getId()) ),
-                            new Text( String.valueOf(accountList.get(counter).getBalance()) )
-                    );
-                    gridPane.add(vBox, i, k);
-                    counter++;
-                }
+        AtomicInteger i = new AtomicInteger(1);
+        AtomicInteger k = new AtomicInteger(1);
+        accountList.forEach((key, value) -> {
+            VBox vBox = new VBox();
+            vBox.setOnMouseClicked(this::accountClickListener);
+            vBox.getChildren().addAll(
+                    new Text( String.valueOf(key) ),
+                    new Text( String.valueOf(value.getBalance()) )
+            );
+            gridPane.add(vBox, k.get() -1, i.get() -1);
+            k.getAndIncrement();
+            if (k.get() == 4) {
+                k.set(1);
+                i.getAndIncrement();
             }
-        }
+        });
+
+    }
+
+    public void initialize(Account account) {
+        initialize( MySQL.getUserById( MySQL.findUserByAccount(account.getId()) ) );
     }
 
     public void accountClickListener(MouseEvent event) {
         VBox vBox = (VBox) event.getSource();
         selected = Integer.parseInt( ( (Text) vBox.getChildren().get(0) ).getText() );
-        System.out.println(selected);
+        fund.setDisable(false);
+        withdraw.setDisable(false);
+        transfer.setDisable(false);
+    }
+
+    public void addFundsListener(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/fundpanel.fxml"));
+        //Switches to fundpanel fxml file
+        Parent root = loader.load();
+        FundPanelController fundPanelController = loader.getController();
+        fundPanelController.initialize(accountList.get(selected));
+        stage = (Stage) ( (Node) event.getSource() ).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void withdrawListener(MouseEvent event) {
+
+    }
+
+    public void transferListener(MouseEvent event) {
+
     }
 }

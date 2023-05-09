@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 final class MySQL {
@@ -64,7 +65,7 @@ final class MySQL {
     }
 
     //Getting user accounts
-    static ArrayList<Account> getUserAccounts(int id) {
+    static HashMap<Integer, Account> getUserAccounts(int id) {
         try {
             //Initiate connection to database;
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -77,11 +78,11 @@ final class MySQL {
             int accId;
             double balance;
 
-            ArrayList<Account> userAccounts = new ArrayList<>();
+            HashMap<Integer, Account> userAccounts = new HashMap<>();
             while(rsAcc.next()) {
                 accId = rsAcc.getInt("id");
                 balance = rsAcc.getDouble("balance");
-                userAccounts.add(new Account(accId, id, balance));
+                userAccounts.put(accId, new Account(accId, id, balance));
             }
             connection.close();
             return userAccounts;
