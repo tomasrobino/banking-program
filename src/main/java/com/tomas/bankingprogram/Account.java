@@ -3,7 +3,7 @@ package com.tomas.bankingprogram;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Account {
+final class Account {
     private final int id, owner_id;
     private double balance;
 

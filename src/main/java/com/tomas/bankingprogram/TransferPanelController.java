@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class TransferPanelController {
+public final class TransferPanelController {
     @FXML
     Stage stage;
     @FXML

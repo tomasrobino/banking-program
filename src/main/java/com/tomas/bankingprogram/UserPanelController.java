@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class UserPanelController {
+public final class UserPanelController {
     private int selected;
     @FXML
     private GridPane gridPane;
@@ -50,14 +50,34 @@ public class UserPanelController {
                 i.getAndIncrement();
             }
         });
-
+        Button open = new Button("Open new account");
+        open.setOnAction(event -> {
+            try {
+                switchToOpenAccountPanel(event, user);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        gridPane.add(open, accountList.size()-1, accountList.size()-1);
     }
 
     public void initialize(Account account) {
         initialize( MySQL.getUserById( account.getOwner_id() ) );
     }
 
-    public void accountClickListener(MouseEvent event) {
+    private void switchToOpenAccountPanel(ActionEvent event ,User user) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/openaccount.fxml"));
+        //Switches to openaccount fxml file
+        Parent root = loader.load();
+        OpenAccountController openAccountController = loader.getController();
+        openAccountController.initialize(user);
+        stage = (Stage) ( (Node) event.getSource() ).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void accountClickListener(MouseEvent event) {
         VBox vBox = (VBox) event.getSource();
         selected = Integer.parseInt( ( (Text) vBox.getChildren().get(0) ).getText() );
         fund.setDisable(false);

@@ -2,7 +2,7 @@ package com.tomas.bankingprogram;
 
 import java.util.HashMap;
 
-class User {
+final class User {
     private final int id;
     private int pin;
     private String name, surname;

@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class WithdrawPanelController {
+public final class WithdrawPanelController {
     @FXML
     Stage stage;
     @FXML
