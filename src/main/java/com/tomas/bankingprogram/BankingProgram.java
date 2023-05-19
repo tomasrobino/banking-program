@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-class BankingProgram extends Application{
+public class BankingProgram extends Application{
     @Override
     public void start(Stage stage) {
         try {
