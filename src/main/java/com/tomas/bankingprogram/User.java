@@ -1,12 +1,12 @@
 package com.tomas.bankingprogram;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
-public class User {
+final class User {
     private final int id;
     private int pin;
     private String name, surname;
-    private ArrayList<Account> accountList = new ArrayList<>();
+    private HashMap<Integer, Account> accountList = new HashMap<>();
 
     User(int id, String name, String surname, int pin) {
         this.id = id;
@@ -15,7 +15,7 @@ public class User {
         this.surname = surname;
     }
 
-    User(int id) {
+    public User(int id) {
         this.id = id;
     }
 
@@ -31,20 +31,10 @@ public class User {
     public String getSurname() {
         return surname;
     }
-    public ArrayList<Account> getAccountList() {
+    public HashMap<Integer, Account> getAccountList() {
         return accountList;
     }
-    public void setAccountList(ArrayList<Account> accountList) {
+    public void setAccountList(HashMap<Integer, Account> accountList) {
         this.accountList = accountList;
-    }
-
-
-
-    public boolean deleteUser(String name, String surname, int pin) {
-        return true;
-    }
-
-    public boolean openAccount(String name, String surname, int pin, int type) {
-        return true;
     }
 }

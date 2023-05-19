@@ -1,8 +1,9 @@
 package com.tomas.bankingprogram;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Account {
+final class Account {
     private final int id, owner_id;
     private double balance;
 
@@ -28,18 +29,20 @@ public class Account {
         MySQL.updateAccount(balance, this.id);
     }
 
+
     public boolean transfer(int second_id, double amount) {
         try {
             int receiverUserId = MySQL.findUserByAccount(second_id);
-            ArrayList<Account> receiverAccs = MySQL.getUserAccounts(receiverUserId);
-            for (Account i : receiverAccs) {
-                if (i.getId() == second_id) {
+            HashMap<Integer, Account> receiverAccs = MySQL.getUserAccounts(receiverUserId);
+            AtomicBoolean aux = new AtomicBoolean(false);
+            receiverAccs.forEach((key, value) -> {
+                if (key == second_id) {
                     changeBalance(-amount);
-                    i.changeBalance(amount);
-                    return true;
+                    value.changeBalance(amount);
+                    aux.set(true);
                 }
-            }
-            return false;
+            });
+            return aux.get();
         } catch (Exception e) {
             return false;
         }

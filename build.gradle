@@ -1,23 +1,42 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.0.6'
-	id 'io.spring.dependency-management' version '1.1.0'
+	id 'org.openjfx.javafxplugin' version '0.0.11'
+	id 'org.beryx.jlink' version '2.26.0'
 }
 
-group = 'com.tomas'
+group = 'com.tomas.bankingprogram'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
+allprojects {
+	apply plugin: 'java'
+	sourceCompatibility = '17'
+}
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	runtimeOnly 'com.mysql:mysql-connector-j:8.0.33'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    runtimeOnly 'com.mysql:mysql-connector-j:8.0.33'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+javafx {
+    version = "20.0.1"
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.graphics' ]
+}
+
+application {
+    mainClass = "com.tomas.bankingprogram.BankingProgram"
+    mainModule = "hellofx"
+}
+
+jlink {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'hellofx'
+    }
+}
+
+test {
+    useJUnitPlatform()
 }
